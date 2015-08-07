@@ -5,34 +5,34 @@ describe('Handling of immutable data', function () {
 
     /** @name TEST_immutabilis */
     describe('immutabilis', function () {
-        describe('makeImmutable', function () {
+        describe('fromJS', function () {
             it('can create immutable data from raw js objects', function () {
-                expectImmutable(immutabilis.makeImmutable({
+                expectImmutable(immutabilis.fromJS({
                     foo: 'foo'
                 }));
             });
 
             it('can create immutable data from raw js arrays', function () {
-                expectImmutable(immutabilis.makeImmutable([1, 2, 3]));
+                expectImmutable(immutabilis.fromJS([1, 2, 3]));
 
             });
 
             it('can create immutable data from any other input', function () {
-                expectImmutable(immutabilis.makeImmutable(1));
-                expectImmutable(immutabilis.makeImmutable('foo'));
-                expectImmutable(immutabilis.makeImmutable(function () {}));
+                expectImmutable(immutabilis.fromJS(1));
+                expectImmutable(immutabilis.fromJS('foo'));
+                expectImmutable(immutabilis.fromJS(function () {}));
             });
 
             it('returns the input when passing an immutable', function () {
-                var immutable = immutabilis.makeImmutable('foo');
-                var result = immutabilis.makeImmutable(immutable);
+                var immutable = immutabilis.fromJS('foo');
+                var result = immutabilis.fromJS(immutable);
                 expect(result).toBe(immutable);
             });
         });
 
         describe('find', function () {
             it('allows you to find any sub value', function () {
-                var data = immutabilis.makeImmutable({
+                var data = immutabilis.fromJS({
                     foo: [{
                         ping: 'ping-1',
                         pong: 'pong-1',
@@ -60,12 +60,12 @@ describe('Handling of immutable data', function () {
             });
 
             it('returns null if no value was found', function () {
-                var data = immutabilis.makeImmutable('foo');
+                var data = immutabilis.fromJS('foo');
                 expect(immutabilis.find(data, 'bar')).toBe(null);
             });
 
             it('returns the initial immutable if no valid selector is given', function () {
-                var data = immutabilis.makeImmutable('foo');
+                var data = immutabilis.fromJS('foo');
                 expect(immutabilis.find(data, false)).toBe(data);
                 expect(immutabilis.find(data, null)).toBe(data);
                 expect(immutabilis.find(data)).toBe(data);
@@ -81,12 +81,12 @@ describe('Handling of immutable data', function () {
         describe('val', function () {
             it('can return the stored value', function () {
                 testData.forEach(function (item) {
-                    expect(immutabilis.makeImmutable(item).val()).toBe(item);
+                    expect(immutabilis.fromJS(item).val()).toBe(item);
                 });
             });
 
             it('can return the value of computed properties', function () {
-                var value = immutabilis.makeImmutable('foo', {
+                var value = immutabilis.fromJS('foo', {
                     size: function (val) {
                         return val.length;
                     }
@@ -97,7 +97,7 @@ describe('Handling of immutable data', function () {
 
             it('returns "null" for any sub-keys', function () {
                 testData.forEach(function (item) {
-                    expect(immutabilis.makeImmutable(item).val('foo')).toBe(null);
+                    expect(immutabilis.fromJS(item).val('foo')).toBe(null);
                 });
             });
         });
@@ -105,7 +105,7 @@ describe('Handling of immutable data', function () {
         describe('sub', function () {
             it('has no sub values', function () {
                 testData.forEach(function (item) {
-                    expect(immutabilis.makeImmutable(item).sub()).toBeFalsy();
+                    expect(immutabilis.fromJS(item).sub()).toBeFalsy();
                 });
             });
         });
@@ -115,7 +115,7 @@ describe('Handling of immutable data', function () {
                 testData.forEach(function (orgData, index) {
                     // prepare
                     var newData = changeData[index];
-                    var value1 = immutabilis.makeImmutable(orgData);
+                    var value1 = immutabilis.fromJS(orgData);
 
                     // execute
                     var value2 = value1.set(orgData);
@@ -132,7 +132,7 @@ describe('Handling of immutable data', function () {
 
             it('allows to changes the value into a list', function () {
                 // prepare
-                var struct = immutabilis.makeImmutable(testData);
+                var struct = immutabilis.fromJS(testData);
 
                 // execute
                 var list = struct.set(['foo']);
@@ -144,7 +144,7 @@ describe('Handling of immutable data', function () {
 
             it('allows to changes the value into a key-value-store', function () {
                 // prepare
-                var list = immutabilis.makeImmutable(testData);
+                var list = immutabilis.fromJS(testData);
 
                 // execute
                 var struct = list.set({foo: 'foo'});
@@ -156,8 +156,8 @@ describe('Handling of immutable data', function () {
 
             it('handles immutable input correctly', function () {
                 // prepare
-                var immutable1 = immutabilis.makeImmutable('foo');
-                var immutable2 = immutabilis.makeImmutable('bar');
+                var immutable1 = immutabilis.fromJS('foo');
+                var immutable2 = immutabilis.fromJS('bar');
 
                 // execute
                 var immutable3 = immutable1.set(immutable1);
@@ -186,7 +186,7 @@ describe('Handling of immutable data', function () {
         describe('val', function () {
             it('can return the stored value', function () {
                 // prepare
-                var struct = immutabilis.makeImmutable(testData);
+                var struct = immutabilis.fromJS(testData);
 
                 // execute
                 var value = struct.val();
@@ -196,14 +196,14 @@ describe('Handling of immutable data', function () {
             });
 
             it('can return the value of a sub', function () {
-                var struct = immutabilis.makeImmutable(testData);
+                var struct = immutabilis.fromJS(testData);
 
                 expect(struct.val('foo')).toEqual(testData.foo);
                 expect(struct.val('bar')).toEqual(testData.bar);
             });
 
             it('can return the value of computed properties', function () {
-                var struct = immutabilis.makeImmutable(testData, {
+                var struct = immutabilis.fromJS(testData, {
                     size: function (val) {
                         return Object.keys(val).length;
                     }
@@ -213,7 +213,7 @@ describe('Handling of immutable data', function () {
             });
 
             it('returns "null" for any unknown sub-keys', function () {
-                var struct = immutabilis.makeImmutable(testData);
+                var struct = immutabilis.fromJS(testData);
                 expect(struct.val('baz')).toBe(null);
             });
         });
@@ -221,7 +221,7 @@ describe('Handling of immutable data', function () {
         describe('sub', function () {
             it('allows to access sub values', function () {
                 // prepare
-                var struct = immutabilis.makeImmutable(testData);
+                var struct = immutabilis.fromJS(testData);
 
                 // execute
                 var sub1 = struct.sub('foo');
@@ -240,7 +240,7 @@ describe('Handling of immutable data', function () {
         describe('set', function () {
             it('allows to add keys', function () {
                 // prepare
-                var struct = immutabilis.makeImmutable(testData);
+                var struct = immutabilis.fromJS(testData);
 
                 // execute
                 var struct2 = struct.set('baz', 'baz_1');
@@ -253,7 +253,7 @@ describe('Handling of immutable data', function () {
 
             it('does not change the immutable', function () {
                 // prepare
-                var struct = immutabilis.makeImmutable(testData);
+                var struct = immutabilis.fromJS(testData);
                 var newData = {
                     foo: 'baz'
                 };
@@ -282,7 +282,7 @@ describe('Handling of immutable data', function () {
 
             it('does not create a new immutable if the data was unchanged', function () {
                 // prepare
-                var struct = immutabilis.makeImmutable(testData);
+                var struct = immutabilis.fromJS(testData);
                 var sub = struct.sub('foo');
 
                 // execute
@@ -305,7 +305,7 @@ describe('Handling of immutable data', function () {
 
             it('allows to changes the struct into a simple value', function () {
                 // prepare
-                var struct = immutabilis.makeImmutable(testData);
+                var struct = immutabilis.fromJS(testData);
 
                 // execute
                 var val = struct.set('foo');
@@ -317,7 +317,7 @@ describe('Handling of immutable data', function () {
 
             it('allows to changes the struct into a list', function () {
                 // prepare
-                var struct = immutabilis.makeImmutable(testData);
+                var struct = immutabilis.fromJS(testData);
 
                 // execute
                 var list = struct.set(['foo']);
@@ -329,8 +329,8 @@ describe('Handling of immutable data', function () {
 
             it('handles immutable input correctly', function () {
                 // prepare
-                var immutable1 = immutabilis.makeImmutable({foo: 'bar'});
-                var immutable2 = immutabilis.makeImmutable('bar');
+                var immutable1 = immutabilis.fromJS({foo: 'bar'});
+                var immutable2 = immutabilis.fromJS('bar');
 
                 // execute
                 var immutable3 = immutable1.set(immutable1);
@@ -342,7 +342,7 @@ describe('Handling of immutable data', function () {
             });
 
             it('returns itself if now values is passed', function () {
-                var struct = immutabilis.makeImmutable({foo: 'bar'});
+                var struct = immutabilis.fromJS({foo: 'bar'});
                 expect(struct.set()).toBe(struct);
             });
         });
@@ -350,7 +350,7 @@ describe('Handling of immutable data', function () {
         describe('each', function () {
             it('allows to change the value of each sub', function () {
                 // prepare
-                var struct1 = immutabilis.makeImmutable({foo: 1, bar: 2, baz: 3});
+                var struct1 = immutabilis.fromJS({foo: 1, bar: 2, baz: 3});
 
                 // execute
                 var struct2 = struct1.each(function (sub) {
@@ -371,7 +371,7 @@ describe('Handling of immutable data', function () {
         describe('val', function () {
             it('can return the stored value', function () {
                 // prepare
-                var list = immutabilis.makeImmutable(testData);
+                var list = immutabilis.fromJS(testData);
 
                 // execute
                 var value = list.val();
@@ -381,7 +381,7 @@ describe('Handling of immutable data', function () {
             });
 
             it('can return the value of a sub', function () {
-                var list = immutabilis.makeImmutable(testData);
+                var list = immutabilis.fromJS(testData);
 
                 expect(list.val(0)).toBe('foo');
                 expect(list.val(1)).toBe('bar');
@@ -389,7 +389,7 @@ describe('Handling of immutable data', function () {
             });
 
             it('can return the value of computed properties', function () {
-                var list = immutabilis.makeImmutable(testData, {
+                var list = immutabilis.fromJS(testData, {
                     size: function (val) {
                         return val.length;
                     }
@@ -399,7 +399,7 @@ describe('Handling of immutable data', function () {
             });
 
             it('returns "null" for any unknown sub-keys', function () {
-                var list = immutabilis.makeImmutable(testData);
+                var list = immutabilis.fromJS(testData);
                 expect(list.val(42)).toBe(null);
             });
         });
@@ -407,7 +407,7 @@ describe('Handling of immutable data', function () {
         describe('sub', function () {
             it('allows to access sub values', function () {
                 // prepare
-                var list = immutabilis.makeImmutable(testData);
+                var list = immutabilis.fromJS(testData);
 
                 // execute
                 var sub1 = list.sub(0);
@@ -426,7 +426,7 @@ describe('Handling of immutable data', function () {
         describe('set', function () {
             it('does not change the immutable', function () {
                 // prepare
-                var list = immutabilis.makeImmutable(testData);
+                var list = immutabilis.fromJS(testData);
                 var newData = ['newfoo', 'newbar', 'newbaz'];
 
                 // execute
@@ -445,7 +445,7 @@ describe('Handling of immutable data', function () {
 
             it('does not create a new immutable if the data was unchanged', function () {
                 // prepare
-                var list = immutabilis.makeImmutable(testData);
+                var list = immutabilis.fromJS(testData);
 
                 // execute
                 var list2 = list.set([testData[0], testData[1], testData[2]]);
@@ -458,7 +458,7 @@ describe('Handling of immutable data', function () {
 
             it('ignores invalid (<0 or non-numeric) keys', function () {
                 // prepare
-                var list = immutabilis.makeImmutable(testData);
+                var list = immutabilis.fromJS(testData);
 
                 // execute
                 var list2 = list.set('foo', 'ping');
@@ -471,7 +471,7 @@ describe('Handling of immutable data', function () {
 
             it('allows to changes the list into a simple value', function () {
                 // prepare
-                var list = immutabilis.makeImmutable(testData);
+                var list = immutabilis.fromJS(testData);
 
                 // execute
                 var val = list.set('foo');
@@ -483,7 +483,7 @@ describe('Handling of immutable data', function () {
 
             it('allows to changes the list into a key-value-store', function () {
                 // prepare
-                var list = immutabilis.makeImmutable(testData);
+                var list = immutabilis.fromJS(testData);
 
                 // execute
                 var struct = list.set({foo: 'foo'});
@@ -495,8 +495,8 @@ describe('Handling of immutable data', function () {
 
             it('handles immutable input correctly', function () {
                 // prepare
-                var immutable1 = immutabilis.makeImmutable([1, 2, 3]);
-                var immutable2 = immutabilis.makeImmutable('bar');
+                var immutable1 = immutabilis.fromJS([1, 2, 3]);
+                var immutable2 = immutabilis.fromJS('bar');
 
                 // execute
                 var immutable3 = immutable1.set(immutable1);
@@ -508,7 +508,7 @@ describe('Handling of immutable data', function () {
             });
 
             it('returns itself if now values is passed', function () {
-                var list = immutabilis.makeImmutable(['foo', 'bar']);
+                var list = immutabilis.fromJS(['foo', 'bar']);
                 expect(list.set()).toBe(list);
             });
         });
@@ -516,7 +516,7 @@ describe('Handling of immutable data', function () {
         describe('each', function () {
             it('allows to change the value of each sub', function () {
                 // prepare
-                var list1 = immutabilis.makeImmutable([1, 2, 3]);
+                var list1 = immutabilis.fromJS([1, 2, 3]);
 
                 // execute
                 var list2 = list1.each(function (num) {
@@ -530,7 +530,7 @@ describe('Handling of immutable data', function () {
 
             it('allows to filter subs', function () {
                 // prepare
-                var list1 = immutabilis.makeImmutable([1, 2, 3, 4]);
+                var list1 = immutabilis.fromJS([1, 2, 3, 4]);
 
                 // execute
                 var list2 = list1.each(function (num) {

@@ -257,7 +257,7 @@ List.prototype.updateList = function (newData) {
  * This is an immutable data object
  */
 module.exports = {
-    makeImmutable: function (data, computed) {
+    fromJS: function (data, computed) {
         return createSub(data, computed);
     },
 
