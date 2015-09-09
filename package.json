@@ -2,7 +2,7 @@
   "name": "immutabilis",
   "version": "2.0.0",
   "description": "A small an powerfull lib for handling immutable data.",
-  "main": "immutabilis.js",
+  "main": "src/immutabilis.js",
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt test",
     "prepublish": "./node_modules/grunt-cli/bin/grunt dist"
