@@ -1,6 +1,6 @@
 {
   "name": "immutabilis",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A small an powerfull lib for handling immutable data.",
   "main": "src/immutabilis.js",
   "scripts": {
