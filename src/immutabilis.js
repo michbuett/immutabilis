@@ -86,7 +86,7 @@ module.exports = (function () {
         return this.value;
     };
 
-    Abstract.prototype.set = function () {};
+    Abstract.prototype.set = undefined; // abstact
 
     Abstract.prototype.sub = function (key) {
         return (this.data && this.data[key]) || null;

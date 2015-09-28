@@ -35,6 +35,18 @@ describe('Handling of immutable data', function () {
                 var result = immutabilis.fromJS(immutable);
                 expect(result).toBe(immutable);
             });
+
+            it('treats non-hash objects as values', function () {
+                var Ctor = function () {};
+                var obj = new Ctor();
+
+                // execute
+                var immutable = immutabilis.fromJS(obj);
+
+                // verify
+                expect(immutable).toBe(immutable);
+                expect(immutable.val()).toBe(obj);
+            });
         });
 
         describe('find', function () {
