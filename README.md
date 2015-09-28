@@ -1,5 +1,6 @@
 # immutabilis
 [![Build Status](https://travis-ci.org/michbuett/immutabilis.svg?branch=master)](https://travis-ci.org/michbuett/immutabilis)
+[![Coverage Status](https://coveralls.io/repos/michbuett/immutabilis/badge.svg?branch=master&service=github)](https://coveralls.io/github/michbuett/immutabilis?branch=master)
 
 A small an powerfull lib for handling immutable data.
 
