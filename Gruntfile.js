@@ -61,7 +61,7 @@ module.exports = function (grunt) {
                 ],
                 dest: 'dist/immutabilis.js',
                 options: {
-                    standalone: true,
+                    standalone: 'immutabilis',
                 }
             },
         },
