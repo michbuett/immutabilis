@@ -22,18 +22,21 @@
   },
   "homepage": "https://github.com/michbuett/immutabilis",
   "devDependencies": {
-    "babelify": "^6.1.3",
     "browserify": "^11.0.0",
     "grunt": "^0.4.5",
     "grunt-browserify": "^3.8.0",
     "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-jasmine": "^0.9.0",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-jasmine-nodejs": "^1.4.2"
+    "grunt-coveralls": "^1.0.0",
+    "grunt-jasmine-nodejs": "^1.4.2",
+    "grunt-template-jasmine-istanbul": "^0.3.4",
+    "grunt-template-jasmine-nml": "^1.0.0"
   },
   "dependencies": {
-    "pro-singulis": "^1.1.1"
+    "pro-singulis": "^1.2.0"
   }
 }

@@ -1,5 +1,12 @@
+/* global window */
 describe('Handling of immutable data', function () {
     'use strict';
+
+    if (typeof window !== 'undefined' && typeof require !== 'function') {
+        window.require = function () {
+            return window.immutabilis;
+        };
+    }
 
     var immutabilis = require('../src/immutabilis');
 

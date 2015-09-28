@@ -1,18 +1,12 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var expandFiles = function (glob) {
-        return grunt.file.expand({
-            filter: 'isFile'
-        }, glob);
-    };
-
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
         watch: {
             all: {
-                files: ['src/**/*.js', 'tests/**/*.js'],
+                files: ['Gruntfile.js', 'src/**/*.js', 'tests/**/*.js'],
                 tasks: ['test']
             },
         },
@@ -31,50 +25,78 @@ module.exports = function (grunt) {
         },
 
         browserify: {
-            options: {
-                browserifyOptions: {
-                    debug: true,
-                },
-            },
-
-            testSources: {
-                src: [ 'src/**/*.js', ],
-                dest: 'dist/test_sources.js',
-                options: {
-                    require: expandFiles([ './src/**/*.js', ])
-                }
-            },
-
-            test: {
-                src: [
-                    'tests/**/*.js',
-                ],
-                dest: 'dist/test_bundle.js',
-                options: {
-                    external: ['src/**/*.js'],
-                }
-            },
-
             dist: {
                 src: [
                     'src/**/*.js',
                 ],
                 dest: 'dist/immutabilis.js',
                 options: {
-                    standalone: 'immutabilis',
+                    browserifyOptions: {
+                        debug: false,
+                        standalone: 'immutabilis',
+                    },
                 }
             },
         },
 
         jasmine: {
-            options: {
-                keepRunner: true,
-                specs: 'dist/test_bundle.js',
+            dist: {
+                src: ['dist/immutabilis.js'],
+
+                options: {
+                    keepRunner: true,
+                    specs: 'tests/**/*.js',
+                },
             },
 
-            all: {
-                src: 'dist/test_sources.js'
+            coverage: {
+                src: ['src/**/*.js'],
+
+                options: {
+                    keepRunner: true,
+                    specs: 'tests/**/*.js',
+                    template: require('grunt-template-jasmine-istanbul'),
+                    templateOptions: {
+                        template: require('grunt-template-jasmine-nml'),
+                        templateOptions: {
+                            pathmap: {
+                                'src/': '.grunt/grunt-contrib-jasmine/src/',
+                            }
+                        },
+                        coverage: 'reports/coverage/coverage.json',
+                        report: [{
+                            type: 'html',
+                            options: {
+                                dir: 'reports/coverage/html',
+                            }
+                        }, {
+                            type: 'lcovonly',
+                            options: {
+                                dir: 'reports/coverage/lcov',
+                            }
+                        }],
+                        thresholds: {
+                            lines: 85,
+                            statements: 85,
+                            branches: 80,
+                            functions: 90
+                        },
+                    }
+                },
             },
+        },
+
+        clean: {
+            dist: ['dist/*'],
+        },
+
+        coveralls: {
+            travis: {
+                src: 'reports/coverage/lcov/*.info',
+                options: {
+                    force: true,
+                }
+            }
         },
 
         uglify: {
@@ -88,11 +110,24 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-jasmine-nodejs');
+    grunt.loadNpmTasks('grunt-coveralls');
 
-    grunt.registerTask('test', ['jshint', 'jasmine_nodejs', 'browserify', 'jasmine']);
-    grunt.registerTask('dist', ['browserify:dist', 'uglify:dist']);
+    grunt.registerTask('test', [
+        'jshint',
+        'jasmine_nodejs',
+        'jasmine:coverage',
+        'dist',
+        'jasmine:dist',
+    ]);
+
+    grunt.registerTask('dist', [
+        'clean',
+        'browserify:dist',
+        'uglify:dist'
+    ]);
 };
