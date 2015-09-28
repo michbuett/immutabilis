@@ -4,7 +4,7 @@
   "description": "A small an powerfull lib for handling immutable data.",
   "main": "src/immutabilis.js",
   "scripts": {
-    "test": "./node_modules/grunt-cli/bin/grunt test",
+    "test": "grunt test && grunt coveralls",
     "prepublish": "./node_modules/grunt-cli/bin/grunt dist"
   },
   "repository": {
