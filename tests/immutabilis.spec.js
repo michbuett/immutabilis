@@ -360,7 +360,29 @@ describe('Handling of immutable data', function () {
                 expect(immutable4).toBe(immutable2);
             });
 
-            it('returns itself if now values is passed', function () {
+            it('handles immutable sub-values correctly', function () {
+                // prepare
+                var immutable = immutabilis.fromJS({foo: 'bar'});
+                var foo = immutable.sub('foo');
+                var bar = immutabilis.fromJS('bar');
+
+                // execute
+                var immutable2 = immutable.set('foo', foo);
+                var immutable3 = immutable.set({
+                    foo: foo
+                });
+                var immutable4 = immutable.set({
+                    foo: bar
+                });
+
+                // verify
+                expect(immutable2).toBe(immutable);
+                expect(immutable3).toBe(immutable);
+                expect(immutable4).not.toBe(immutable);
+                expect(immutable4.val('foo')).toBe('bar');
+            });
+
+            it('returns itself if no value is passed', function () {
                 var struct = immutabilis.fromJS({foo: 'bar'});
                 expect(struct.set()).toBe(struct);
             });
