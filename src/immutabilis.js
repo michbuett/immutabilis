@@ -1,6 +1,7 @@
 module.exports = (function () {
     'use strict';
 
+    var uuid = '52be5395-a182-46dd-b518-091a1c476a63';
     var each = require('pro-singulis');
 
     /**
@@ -8,7 +9,7 @@ module.exports = (function () {
      * @private
      */
     function isImmutable(obj) {
-        return obj && (obj instanceof Value || obj instanceof Struct || obj instanceof List);
+        return obj && (obj.typeId === uuid);
     }
 
     function isObject(o) {
@@ -62,6 +63,8 @@ module.exports = (function () {
         });
         this.computedProps = computed;
     }
+
+    Abstract.prototype.typeId = uuid;
 
     Abstract.prototype.val = function (key) {
         if (typeof key !== 'undefined') {
